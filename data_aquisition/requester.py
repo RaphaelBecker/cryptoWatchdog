@@ -1,7 +1,7 @@
 import requests
 import pandas as pd
 import numpy as np
-from pandas import DataFrame
+from datetime import datetime
 
 
 class DataGrab:
@@ -14,6 +14,7 @@ class DataGrab:
         """
 
         def splitPair(tickerString):
+            # Split conversion pairs
             if tickerString[-4:] == 'USDT':
                 return [tickerString.split('USDT')[0].lower(), 'usdt']
             elif tickerString[-3:] == 'ETH':
@@ -25,7 +26,13 @@ class DataGrab:
             return np.nan
 
         url = 'https://api.binance.com/api/v1/ticker/24hr'
+        # Generate dataframe from json file
         bnn_df = pd.DataFrame(requests.get(url).json())
+        current_datetime = datetime.now()
+        year = current_datetime.strftime("%Y")
+        month = current_datetime.strftime("%m")
+        day = current_datetime.strftime("%d")
+        time = current_datetime.strftime("%H:%M:%S")
 
         bnn_df['symbol'] = bnn_df.apply(lambda x: splitPair(x['symbol']), axis=1)
         bnn_df = bnn_df.dropna()
@@ -41,9 +48,17 @@ class DataGrab:
         bnn_df['spread'] = bnn_df.ask - bnn_df.bid
         columns.extend(['base', 'quote', 'spread', 'exchange'])
         bnn_df = bnn_df[columns]
-        bnn_df = bnn_df[bnn_df["quote"] == "usd"].reset_index()\
+
+        # Filter data to only get price conversion to USD and drop all other data
+        bnn_df = bnn_df[bnn_df["quote"] == "usd"].reset_index() \
             .drop("index", axis=1)
+        bnn_df['Year'] = year
+        bnn_df['Month'] = month
+        bnn_df['Day'] = day
+        bnn_df['Time'] = time
+
         return bnn_df
+
 
 if __name__ == '__main__':
     crypto_data = DataGrab().getBinanceSpot()

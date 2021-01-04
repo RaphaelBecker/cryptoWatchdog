@@ -32,6 +32,8 @@ MANIFEST
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+**/.idea
+*.csv
 
 # Generated files
 .idea/**/contentModel.xml

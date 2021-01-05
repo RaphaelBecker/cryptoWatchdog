@@ -26,6 +26,7 @@ def get_binance_data():
     url = 'https://api.binance.com/api/v1/ticker/24hr'
     # Generate dataframe from json file
     bnn_df = pd.DataFrame(requests.get(url).json())
+    bnn_df.to_csv('rnadom.csv')
     current_datetime = datetime.now()
     year = current_datetime.strftime("%Y")
     month = current_datetime.strftime("%m")

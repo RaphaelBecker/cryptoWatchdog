@@ -26,11 +26,12 @@ def get_binance_data():
     url = 'https://api.binance.com/api/v1/ticker/24hr'
     # Generate dataframe from json file
     bnn_df = pd.DataFrame(requests.get(url).json())
-    bnn_df.to_csv('rnadom.csv')
+
     current_datetime = datetime.now()
-    year = current_datetime.strftime("%Y")
-    month = current_datetime.strftime("%m")
-    day = current_datetime.strftime("%d")
+    # Getting time and date data for api request
+    date = current_datetime.strftime("%Y-%m-%d")
+    # month = current_datetime.strftime("%m")
+    # day = current_datetime.strftime("%d")
     time = current_datetime.strftime("%H:%M:%S")
 
     bnn_df['symbol'] = bnn_df.apply(lambda x: split_pair(x['symbol']), axis=1)
@@ -51,10 +52,12 @@ def get_binance_data():
     # Filter data to only get price conversion to USD and drop all other data
     bnn_df = bnn_df[bnn_df["quote"] == "usd"].reset_index() \
         .drop("index", axis=1)
-    bnn_df['Year'] = year
-    bnn_df['Month'] = month
-    bnn_df['Day'] = day
-    bnn_df['Time'] = time
+
+    # Populating data frame with time and date data
+    bnn_df['Date'] = pd.to_datetime(date)
+    # bnn_df['Month'] = month
+    # bnn_df['Day'] = day
+    bnn_df['Time'] = pd.to_datetime(time)
 
     return bnn_df
 

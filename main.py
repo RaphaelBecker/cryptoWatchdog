@@ -9,10 +9,13 @@ def main():
     Program is going to run unless interrupted manually
     :return: Nothing
     """
+    i = 0
     while True:
+        i += 1
+        print("Running...", i)
         data = get_binance_data()
         data_cruncher(data)
-        update_time = 5;
+        update_time = 5
         # Updates data every update_time seconds
         time.sleep(update_time)
 

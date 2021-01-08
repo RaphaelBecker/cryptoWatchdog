@@ -1,5 +1,8 @@
 import pandas as pd
 import os.path
+
+from numpy import nan
+
 from data_processing.rsi_calculator import rsi_calculator
 
 
@@ -18,8 +21,22 @@ def data_cruncher(raw_dataframe):
         # Timespan to calculate the RSI Index, default is 14
         time_span = 14
 
-        rsi, rs, average_gain, average_loss, loss, gain = \
-            rsi_calculator(file_name, coin_price, time_span)
+        # Check is historic data exists. If it does try to calculate the RSI
+        if os.path.isfile(file_name):
+            with open(file_name) as coin_historic_data:
+                historic_data = pd.read_csv(coin_historic_data)
+                coin_historic_data.close()
+
+            rsi, rs, average_gain, average_loss, loss, gain = \
+                rsi_calculator(historic_data, coin_price, time_span)
+        else:
+            gain = nan
+            loss = nan
+            average_gain = nan
+            average_loss = nan
+            rs = nan
+            rsi = nan
+
         # Generate dataframe for particular time instance
         coin_data = pd.DataFrame({"Coin Name": coin_name, "Price": coin_price,
                                   "Volume": coin_volume, "Gain": gain, "Loss": loss,

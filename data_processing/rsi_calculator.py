@@ -2,8 +2,6 @@ import warnings
 
 import numpy as np
 from math import nan
-import os
-import pandas as pd
 
 
 def rsi_calculator(coin_data, coin_price: float, time_span=14):

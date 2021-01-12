@@ -23,6 +23,7 @@ def data_cruncher(raw_dataframe):
 
         # Check is historic data exists. If it does try to calculate the RSI
         if os.path.isfile(file_name):
+            # TODO: Workaround to find way to not load the entire dataset
             with open(file_name) as coin_historic_data:
                 historic_data = pd.read_csv(coin_historic_data)
                 coin_historic_data.close()

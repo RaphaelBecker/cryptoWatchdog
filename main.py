@@ -11,10 +11,13 @@ def main():
     Program is going to run unless interrupted manually
     :return: Nothing
     """
+    i = 0
     while True:
+        update_time = 5
+        i += 1
+        print("Running...", i)
         data = get_binance_data()
         data_cruncher(data)
-        update_time = 5;
         post_message_to_chat_group("this is from python program")
         # Updates data every update_time seconds
         time.sleep(update_time)

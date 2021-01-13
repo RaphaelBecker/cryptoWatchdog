@@ -4,7 +4,7 @@ import os.path
 from numpy import nan
 
 from data_processing.rsi_calculator import rsi_calculator
-
+from telegram_bot.notificator import alert_rsi
 
 def data_cruncher(raw_dataframe):
     """
@@ -37,6 +37,8 @@ def data_cruncher(raw_dataframe):
             average_loss = nan
             rs = nan
             rsi = nan
+
+        alert_rsi(coin_name, rsi, date_time)
 
         # Generate dataframe for particular time instance
         coin_data = pd.DataFrame({"Coin Name": coin_name, "Price": coin_price,

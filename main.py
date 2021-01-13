@@ -4,7 +4,7 @@ from data_processing.data_processor import data_cruncher
 from telegram_bot.notificator import bot_ready
 
 import time
-
+from datetime import date
 
 def main():
     """
@@ -13,8 +13,8 @@ def main():
     """
     i = 0
     while True:
-        bot_ready("-------Analyzing market data-------")
-        update_time = 10
+        bot_ready('---Analyzing market data on "{}"'.format(date.today()) + "---")
+        update_time = 5
         i += 1
         print("Running...", i)
         data = get_binance_data()

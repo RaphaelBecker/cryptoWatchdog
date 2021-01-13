@@ -42,6 +42,6 @@ def rsi_calculator(coin_data, coin_price: float, time_span=14):
         average_loss = nan
         rs = nan
         rsi = nan
-        warnings.warn("price data needs to be >" + str(time_span))
+        warnings.warn('price data needs to be >"{}"'.format(time_span))
 
     return rsi, rs, average_gain, average_loss, loss, gain

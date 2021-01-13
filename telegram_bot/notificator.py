@@ -7,11 +7,12 @@ def post_message_to_chat_group(message_string):
 
 
 def alert_rsi(coin_name, rsi, date_time):
-    print(date_time)
-    if rsi > 70:
+    rsi_upper_bound = 70
+    rsi_lower_bound = 30
+    if rsi > rsi_upper_bound:
         message = coin_name + " is overbought. Time to sell! RSI = " + str(rsi)
         post_message_to_chat_group(message)
-    elif rsi > 70:
+    elif rsi > rsi_lower_bound:
         message = coin_name + " is oversold. Time to buy! RSI = " + str(rsi)
         post_message_to_chat_group(message)
     else:

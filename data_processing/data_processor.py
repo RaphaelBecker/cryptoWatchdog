@@ -26,7 +26,6 @@ def data_cruncher(raw_dataframe):
 
         # Check is historic data exists. If it does try to calculate the RSI
         if os.path.isfile(cache_file_name):
-            # TODO: Workaround to find way to not load the entire dataset
             with open(cache_file_name) as coin_cached_data:
                 historic_data = pd.read_csv(coin_cached_data, index_col=[0])
 
@@ -63,7 +62,6 @@ def data_cruncher(raw_dataframe):
         # Save updated file
         save_data_to_archive(archived_file_name, coin_data)
         save_data_to_cache(cache_file_name, historic_data)
-    # TODO: Check how heroku works
 
 
 def get_key_coin_data(coin):

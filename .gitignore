@@ -34,6 +34,7 @@ MANIFEST
 .idea/**/shelf
 **/.idea
 *.csv
+*/*.csv
 
 # Generated files
 .idea/**/contentModel.xml

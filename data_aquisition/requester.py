@@ -27,7 +27,6 @@ def get_binance_data():
     url = 'https://api.binance.com/api/v1/ticker/24hr'
     # Generate dataframe from json file
     bnn_df = pd.DataFrame(requests.get(url).json())
-    bnn_df.to_csv("rawData.csv")
 
     current_datetime = datetime.now()
     # Getting time and date data for api request
@@ -84,5 +83,4 @@ def filter_required_coins(dataframe):
 
 if __name__ == '__main__':
     crypto_data = get_binance_data()
-    crypto_data.to_csv('sandbox_data.csv')
     print(crypto_data)

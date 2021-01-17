@@ -37,3 +37,4 @@ def bot_ready(message):
     :return:
     """
     post_message_to_chat_group(message)
+

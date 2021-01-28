@@ -1,1 +1,2 @@
-# crypto_notificator
+# Welcome to cryptoWatchdog
+A server notification service for cryptocurrencies

@@ -5,3 +5,9 @@
 
 Wishlist:
 * Add line charts visualizations
+* Input various timeframes for the rsi calculator
+* Multiple rsi caculations during a time cycle
+* make the client able to post commands to the server (Telegram research)
+* Setting up a testing pipeline for github 
+* Add Licence agreements
+

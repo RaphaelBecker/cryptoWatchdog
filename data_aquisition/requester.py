@@ -4,7 +4,6 @@ import numpy as np
 import csv
 from datetime import datetime
 
-
 def get_binance_data():
     """
     Pulls Binance Spot Prices. Returns Datafram with: ask, bid, price, volume, base, quote, spread, exchange.
@@ -69,7 +68,7 @@ def get_binance_data():
 
     return bnn_df
 
-
+#%%
 def filter_required_coins(dataframe):
     with open('./data_processing/resources/selectedCurrencies.csv') as file:
         reader = csv.reader(file)
@@ -80,7 +79,7 @@ def filter_required_coins(dataframe):
     dataframe = dataframe[dataframe["base"].isin(filtered_coin_list)]
     return dataframe
 
-
+#%%
 if __name__ == '__main__':
     crypto_data = get_binance_data()
     print(crypto_data)

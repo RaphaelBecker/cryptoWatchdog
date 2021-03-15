@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+
 import requests
 import pandas as pd
 import numpy as np
@@ -55,22 +58,27 @@ def get_binance_data():
 
     # Filter only the coins we require
     bnn_df = filter_required_coins(bnn_df)
-    with open('./data_processing/resources/nameSymbolDictionary.csv') as file:
+    cwd = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'data_processing', 'resources'
+                                       , 'nameSymbolDictionary.csv'))
+
+    with open(cwd) as file:
         abv_to_coin_name_dict = csv.reader(file)
         abv_to_coin_name_dict = dict(abv_to_coin_name_dict)
 
     bnn_df = bnn_df.replace({"base": abv_to_coin_name_dict})
     # Populating data frame with time and date data
-    bnn_df['Date'] = pd.to_datetime(date)
+    bnn_df['date_stamp'] = pd.to_datetime(date)
     # bnn_df['Month'] = month
     # bnn_df['Day'] = day
-    bnn_df['Time'] = pd.to_datetime(time)
+    bnn_df['time_stamp'] = pd.to_datetime(time)
 
     return bnn_df
 
-#%%
+
 def filter_required_coins(dataframe):
-    with open('./data_processing/resources/selectedCurrencies.csv') as file:
+    cwd = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'data_processing', 'resources'
+                                       , 'selectedCurrencies.csv'))
+    with open(cwd) as file:
         reader = csv.reader(file)
         filtered_coin_list = list(reader)
         filtered_coin_list = filtered_coin_list[0]
@@ -79,7 +87,7 @@ def filter_required_coins(dataframe):
     dataframe = dataframe[dataframe["base"].isin(filtered_coin_list)]
     return dataframe
 
-#%%
+
 if __name__ == '__main__':
     crypto_data = get_binance_data()
     print(crypto_data)

@@ -12,8 +12,8 @@ def store_to_db():
     """
     i = 0
     while True:
-        # Updates every <update_time> seconds
-        update_time = 5
+        # Updates every 15 minutes seconds
+        update_time = 60*10
         i += 1
         print("Running...", i)
         # Get data from the binance API as a dataframe

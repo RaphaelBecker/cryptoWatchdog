@@ -18,7 +18,7 @@ def store_to_db():
         print("Running...", i)
         # Get data from the binance API as a dataframe
         data = get_binance_data()
-        db_password = 'qwertyuiopasdfghjklzxcvbnm' # Store in env vars
+        db_password = 'asimplepword' # Store in env vars
         db_name = 'crypto_currency'
         engine = create_engine(('postgresql://postgres:{}@localhost/'+db_name).format(db_password))
         # Write to database

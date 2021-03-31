@@ -9,7 +9,7 @@ def post_message_to_chat_group(message_string):
     """
     # TODO: add API key to env vars before release
     #api_key_url = os.environ.get('API_KEY_URL')
-    api_key_url ='test_api_key_url'
+    api_key_url ='test_api_key_url'. # TODO change for real one here
     base_url = api_key_url + '{}'.format(message_string)
     print(message_string)
     requests.get(base_url)

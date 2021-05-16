@@ -4,9 +4,8 @@ import numpy as np
 from math import nan
 from data_aquisition.database_requester import get_every_nth_price_as_dataframe
 
-def rsi_calculator(coin, time_space=14):
-    print(coin)
-    # coin_price_data = get_every_nth_price_as_dataframe(1, coin)
+def rsi_calculator(coin, update_time, frequency=14):
+    coin_price_data = get_every_nth_price_as_dataframe(frequency, update_time, 'Bitcoin')
 
 """Depricated RSI calculator code which used csv files"""
 # def rsi_calculator(time_span=14):

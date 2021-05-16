@@ -18,7 +18,7 @@ def main():
         # TODO: Undo this after testing
         bot_ready('---Analyzing market data on "{}"'.format(date.today()) + "---")
         # TODO: change sleep time after testing
-        update_time = 10 #60*60*6
+        update_time = 60*60*24
         i += 1
         print("Running...", i)
         with open('./data_processing/resources/selectedCurrencies.csv', newline='') as f:
@@ -35,7 +35,7 @@ def main():
             abv_to_coin_name_dict = dict(abv_to_coin_name_dict)
 
         for coin in coins:
-            rsi_calculator(abv_to_coin_name_dict[coin])
+            rsi_calculator(abv_to_coin_name_dict[coin], update_time)
         # No longer needed as data is being fetched from the database.
         # data = get_binance_data()
         # data_cruncher(data)

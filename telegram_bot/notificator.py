@@ -1,5 +1,5 @@
 import requests
-import os
+
 
 def post_message_to_chat_group(message_string):
     """
@@ -8,11 +8,32 @@ def post_message_to_chat_group(message_string):
     :return:
     """
     # TODO: add API key to env vars before release
-    #api_key_url = os.environ.get('API_KEY_URL')
-    api_key_url ='https://api.telegram.org/bot1404857843:AAH8OmM19idv3C-LLNzTiUsW3Je7IeS9n-w/sendMessage?chat_id=301600425&text='
-    base_url = api_key_url + '{}'.format(message_string)
+    # api_key_url = os.environ.get('API_KEY_URL_MESSAGE')
+    api_key_url_message = 'insert postMessage url here'
+    base_url_message = api_key_url_message + '{}'.format(message_string)
     print(message_string)
-    requests.get(base_url)
+    resp = requests.get(base_url_message)
+    print('POST_MESSAGE_LOG: ' + resp.text)
+
+
+def post_photo_to_chat_group(caption_string, ticker_symbol):
+    """
+    Posts photo to telegram group
+    :param caption_string:
+    :param ticker_symbol:
+    :photo:
+    :return:
+    """
+    file_path = './visualization/plots/' + ticker_symbol + '.png'
+    print(file_path)
+    mode = 'rb'  # read and byte mode
+    file = {'photo': open(file_path, mode)}
+    # TODO: add API key to env vars before release
+    # api_key_url_photo = os.environ.get('API_KEY_URL_PHOTO')
+    api_key_url_photo = 'insert postPhoto url here'
+    base_url_photo = api_key_url_photo + caption_string
+    resp = requests.post(base_url_photo, files=file)
+    print('POST_PHOTO_LOG: ' + resp.text)
 
 
 def alert_rsi(coin_name, rsi, date_time):
@@ -33,10 +54,10 @@ def alert_rsi(coin_name, rsi, date_time):
     else:
         pass
 
+
 def bot_ready(message):
     """
     send an initialization message to group
     :return:
     """
     post_message_to_chat_group(message)
-

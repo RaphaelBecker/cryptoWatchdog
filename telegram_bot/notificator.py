@@ -10,12 +10,12 @@ def post_message_to_chat_group(message_string):
     # TODO: add API key to env vars before release
     api_key_url = os.environ.get('API_KEY_URL')
     #api_key_url ='test_api_key_url'. # TODO change for real one here
+    api_key_url ='https://api.telegram.org/bot1404857843:AAH8OmM19idv3C-LLNzTiUsW3Je7IeS9n-w/sendMessage?chat_id=301600425&text='
     base_url = api_key_url + '{}'.format(message_string)
     print(message_string)
     requests.get(base_url)
 
-
-def alert_rsi(coin_name, rsi, date_time):
+def alert_rsi(coin_name, rsi):
     """
     :param coin_name:
     :param rsi: RSI-time_span value

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from data_aquisition.requester import get_binance_data
 from data_processing.data_processor import data_cruncher
-from telegram_bot.notificator import bot_ready
+from telegram_bot.notificator import bot_ready, alert_rsi
 from data_processing.rsi_calculator import rsi_calculator
 from datetime import date
 import csv
@@ -21,7 +21,8 @@ def main():
         update_time = 60*60*24
         i += 1
         print("Running...", i)
-        with open('./data_processing/resources/selectedCurrencies.csv', newline='') as f:
+        path = os.getcwd()
+        with open(path + '/data_processing/resources/selectedCurrencies.csv', newline='') as f:
             reader = csv.reader(f)
             coins = list(reader)
             coins = coins[0]
@@ -30,12 +31,13 @@ def main():
                          , 'nameSymbolDictionary.csv'))
 
         # To convert from coin symbol to coin name as that is how they are stored in the database
-        with open('./data_processing/resources/nameSymbolDictionary.csv') as file:
+        with open(path + '/data_processing/resources/nameSymbolDictionary.csv') as file:
             abv_to_coin_name_dict = csv.reader(file)
             abv_to_coin_name_dict = dict(abv_to_coin_name_dict)
 
         for coin in coins:
-            rsi_calculator(abv_to_coin_name_dict[coin], update_time)
+            rsi = rsi_calculator(abv_to_coin_name_dict[coin], update_time)
+            alert_rsi(coin, rsi)
         # No longer needed as data is being fetched from the database.
         # data = get_binance_data()
         # data_cruncher(data)
@@ -43,7 +45,7 @@ def main():
 
         # Updates data every update_time seconds
         # TODO: Undo this after testing
-        # bot_ready("-----------Task finished-----------")
+        bot_ready("-----------Task finished-----------")
         time.sleep(update_time)
 #
 if __name__ == "__main__":

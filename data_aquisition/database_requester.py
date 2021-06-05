@@ -20,15 +20,15 @@ def get_every_nth_record_as_dataframe(n, symbol):
 
 
 # returns a dataframe with every n price for a symbol
-def get_every_nth_price_as_dataframe(frequency, update_time, coin_name):
-    now = datetime.datetime.now()
-    start = now - datetime.timedelta(seconds=update_time*frequency)
+def get_every_nth_price_as_dataframe(frequency, update_time, starting_datetime, coin_name):
+    now = starting_datetime
+    start = now - datetime.timedelta(seconds=update_time*(frequency+1))
     now = now.strftime("%Y-%m-%d %H:%M:%S")
     start = start.strftime("%Y-%m-%d %H:%M:%S")
     # TODO: In actual implementation this needs to be deleted
     # print(start, now)
-    start = '2021-04-02 18:10:22'
-    now = '2021-04-16 18:10:22'
+    # start = '2021-04-02 18:10:22'
+    # now = '2021-04-16 18:10:22'
     # Important SQL query to query data from selected dates
     every_nth_price_dataframe_query = \
         'SELECT * FROM crypto_master_data ' \
@@ -39,10 +39,8 @@ def get_every_nth_price_as_dataframe(frequency, update_time, coin_name):
     every_nth_price_dataframe = pd.read_sql_query(every_nth_price_dataframe_query, engine)
     # Database must not be empty
     assert len(every_nth_price_dataframe) > 0, 'Data base is empty'
-    every_nth_price_dataframe = every_nth_price_dataframe[every_nth_price_dataframe.index % (math.ceil(len(every_nth_price_dataframe) / frequency)) == 0]
-    print(every_nth_price_dataframe)
+    # We must always fetch 1 more than the number of RSI frequency since the first value has no change information
+    every_nth_price_dataframe = every_nth_price_dataframe[every_nth_price_dataframe.index % (len(every_nth_price_dataframe) // frequency) == 0]
+    assert len(every_nth_price_dataframe) == frequency + 1, "Incorrect number of records filtered from the dataframe. {df_length} fetched".format(df_length = len(every_nth_price_dataframe))
 
-    # every_nth_price_dataframe_query = 'SELECT * FROM crypto_master_data WHERE time_stamp < \'2021-03-30 00:00:00\' AND crypto_master_data.time_stamp > \'2021-03-28 00:00:00\' AND crypto_master_data.base = \'Bitcoin\';'
-    # every_nth_price_dataframe_query = 'SELECT "Price" FROM (SELECT *, row_number() over() "rn" FROM "' + symbol + '") foo WHERE foo.rn %% ' + str(n) + ' = 0;'
-    # every_nth_price_dataframe = pd.read_sql_query(every_nth_price_dataframe_query, engine)
-    # return every_nth_price_dataframe
+    return every_nth_price_dataframe

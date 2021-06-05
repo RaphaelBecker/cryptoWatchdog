@@ -3,9 +3,24 @@ import warnings
 import numpy as np
 from math import nan
 from data_aquisition.database_requester import get_every_nth_price_as_dataframe
+import datetime
 
-def rsi_calculator(coin, update_time, frequency=14):
-    coin_price_data = get_every_nth_price_as_dataframe(frequency, update_time, 'Bitcoin')
+def rsi_calculator(coin, update_time,  starting_datetime = datetime.datetime.now(), frequency=14):
+    # start = '2021-04-02 18:10:22'
+    #TODO Only for debugging, remove later
+    starting_datetime = '2021-04-16 15:10:22'
+    starting_datetime = datetime.datetime.strptime(starting_datetime, "%Y-%m-%d %H:%M:%S")
+    coin_price_data = get_every_nth_price_as_dataframe(frequency, update_time, starting_datetime, coin)
+    coin_price_data["price_change"] = coin_price_data["ask"].diff()
+    coin_price_data["gain"] = coin_price_data["price_change"].apply(lambda  x: abs(x) if x >= 0 else 0)
+    coin_price_data["loss"] = coin_price_data["price_change"].apply(lambda  x: abs(x) if x <= 0 else 0)
+    gain_avg = np.mean(coin_price_data["gain"].iloc[1:])
+    loss_avg = np.mean(coin_price_data["loss"].iloc[1:])
+    relative_strength = gain_avg / loss_avg
+    rsi = 100 - 100/(1+relative_strength)
+    return  rsi
+
+
 
 """Depricated RSI calculator code which used csv files"""
 # def rsi_calculator(time_span=14):

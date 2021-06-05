@@ -6,10 +6,9 @@ from data_aquisition.database_requester import get_every_nth_price_as_dataframe
 import datetime
 
 def rsi_calculator(coin, update_time,  starting_datetime = datetime.datetime.now(), frequency=14):
-    # start = '2021-04-02 18:10:22'
-    #TODO Only for debugging, remove later
-    starting_datetime = '2021-04-16 15:10:22'
-    starting_datetime = datetime.datetime.strptime(starting_datetime, "%Y-%m-%d %H:%M:%S")
+    # TODO Only for debugging, remove later
+    # starting_datetime = '2021-04-16 15:10:22'
+    # starting_datetime = datetime.datetime.strptime(starting_datetime, "%Y-%m-%d %H:%M:%S")
     coin_price_data = get_every_nth_price_as_dataframe(frequency, update_time, starting_datetime, coin)
     coin_price_data["price_change"] = coin_price_data["ask"].diff()
     coin_price_data["gain"] = coin_price_data["price_change"].apply(lambda  x: abs(x) if x >= 0 else 0)

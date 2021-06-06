@@ -3,17 +3,11 @@
 # %%
 
 import matplotlib.pyplot as plt
-import telegram_bot.notificator as nf
 import data_aquisition.database_requester as rq
 from datetime import datetime, timedelta
 
-# TODO: Only for standalone TEST. Delete when integrated
-caption = 'caption_text'
-ticker_symbol = 'Bitcoin'
-days_to_plot = 34
 
-
-def create_plot(ticker, days_from_now):
+def create_plot_last_days(ticker, days_from_now):
     # preparations:
     file_path = './visualization/plots/' + ticker + '.png'
     data_base_df = rq.get_db_as_dataframe()
@@ -22,9 +16,6 @@ def create_plot(ticker, days_from_now):
 
     # creates dataframe with all columns of 'ticker' of the last 'days_from_now' days
     ticker_dataframe = data_base_df[(data_base_df["base"] == ticker) & (data_base_df["date_stamp"] > date_time_minus)]
-    # calculate min and max dates included in dataframe:
-    date_min = datetime.date(ticker_dataframe['date_stamp'].min())
-    date_max = datetime.date(ticker_dataframe['date_stamp'].max())
 
     # RSI calculation:
     delta = ticker_dataframe['ask'].diff()
@@ -38,9 +29,12 @@ def create_plot(ticker, days_from_now):
     # Skip first 14 entries to have real values
     ticker_dataframe = ticker_dataframe.iloc[14:]
 
+    ticker_dataframe.reset_index(drop=True, inplace=True)
+    index = ticker_dataframe.index
+    number_of_rows = len(index)
     fig, (ax1, ax2) = plt.subplots(2)
     ax1.get_xaxis().set_visible(False)
-    fig.suptitle(ticker + ' ' + str(date_min) + ' - ' + str(date_max))
+    fig.suptitle(ticker + ' ' + str(ticker_dataframe.at[1, 'time_stamp']) + ' - ' + str(ticker_dataframe.at[number_of_rows - 1, 'time_stamp']))
 
     ticker_dataframe['ask'].plot(ax=ax1)
     ax1.set_ylabel('Price ($)')
@@ -56,9 +50,27 @@ def create_plot(ticker, days_from_now):
     plt.show()
 
 
-# TODO: Delete and integrate into project when standalone TEST is removed:
+def plot_from_dataframe(dataframe):
+    # reset index:
+    dataframe.reset_index(drop=True, inplace=True)
+    index = dataframe.index
+    number_of_rows = len(index)
+    ticker = str(dataframe.at[1, 'base'])
+    file_path = './visualization/plots/' + ticker + '.png'
+    fig, (ax1, ax2) = plt.subplots(2)
+    ax1.get_xaxis().set_visible(False)
+    fig.suptitle(ticker + ' ' + str(dataframe.at[1, 'time_stamp']) + ' - ' + str(dataframe.at[number_of_rows - 1, 'time_stamp']))
 
-# posts photo to chat group:
-create_plot(ticker_symbol, days_to_plot)
-# sends photo to telegram group:
-nf.post_photo_to_chat_group(caption, ticker_symbol)
+    dataframe['ask'].plot(ax=ax1)
+    ax1.set_ylabel('Price ($)')
+    dataframe['RSI'].plot(ax=ax2)
+    ax2.set_ylim(0, 100)
+    ax2.get_xaxis().set_visible(False)
+
+    ax2.axhline(30, color='r', linestyle='--')
+    ax2.axhline(70, color='r', linestyle='--')
+    ax2.set_ylabel('RSI')
+
+    plt.savefig(file_path, dpi=300, transparent=True)
+    plt.show()
+

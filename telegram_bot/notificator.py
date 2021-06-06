@@ -9,7 +9,9 @@ def post_message_to_chat_group(message_string):
     """
     # TODO: add API key to env vars before release
     # api_key_url = os.environ.get('API_KEY_URL_MESSAGE')
-    api_key_url_message = 'insert postMessage url here'
+    api_key_url_message = 'https://api.telegram.org/bot1597486965:AAGIjRUzD9NTJfaeOgjvmSDNyMAL6NQ7O5c/sendMessage' \
+                          '?chat_id' \
+                          '=-1001424139495&text='
     base_url_message = api_key_url_message + '{}'.format(message_string)
     print(message_string)
     resp = requests.get(base_url_message)
@@ -30,7 +32,8 @@ def post_photo_to_chat_group(caption_string, ticker_symbol):
     file = {'photo': open(file_path, mode)}
     # TODO: add API key to env vars before release
     # api_key_url_photo = os.environ.get('API_KEY_URL_PHOTO')
-    api_key_url_photo = 'insert postPhoto url here'
+    api_key_url_photo = 'https://api.telegram.org/bot1597486965:AAGIjRUzD9NTJfaeOgjvmSDNyMAL6NQ7O5c/sendPhoto?chat_id' \
+                        '=-1001424139495&caption='
     base_url_photo = api_key_url_photo + caption_string
     resp = requests.post(base_url_photo, files=file)
     print('POST_PHOTO_LOG: ' + resp.text)

@@ -40,7 +40,12 @@ def get_every_nth_price_as_dataframe(frequency, update_time, starting_datetime, 
     # Database must not be empty
     assert len(every_nth_price_dataframe) > 0, 'Data base is empty'
     # We must always fetch 1 more than the number of RSI frequency since the first value has no change information
+    # This works on the assumption that entries in the database are evenly spaced wrt time
+    # Reversing indices
+    every_nth_price_dataframe = every_nth_price_dataframe.loc[::-1].reset_index(drop=True)
     every_nth_price_dataframe = every_nth_price_dataframe[every_nth_price_dataframe.index % (len(every_nth_price_dataframe) // frequency) == 0]
+    every_nth_price_dataframe = every_nth_price_dataframe.loc[::-1]
+    # every_nth_price_dataframe = every_nth_price_dataframe.iloc[::-1]
     assert len(every_nth_price_dataframe) == frequency + 1, "Incorrect number of records filtered from the dataframe. {df_length} fetched".format(df_length = len(every_nth_price_dataframe))
 
     return every_nth_price_dataframe

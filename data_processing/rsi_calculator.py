@@ -5,10 +5,17 @@ from math import nan
 from data_aquisition.database_requester import get_every_nth_price_as_dataframe
 import datetime
 
-def rsi_calculator(coin, update_time,  starting_datetime = datetime.datetime.now(), frequency=14):
+def rsi_calculator(coin, update_time, starting_datetime = datetime.datetime.now(), frequency=14):
+    """
+    :param coin: name of the coin we are doing the calculation for
+    :param update_time: time in seconds
+    :param starting_datetime: the time at which the rsi should be calculated
+    :param frequency: the frequency of rsi - normally 14
+    :return: the calculated rsi as float
+    """
     # TODO Only for debugging, remove later
-    # starting_datetime = '2021-04-16 15:10:22'
-    # starting_datetime = datetime.datetime.strptime(starting_datetime, "%Y-%m-%d %H:%M:%S")
+    starting_datetime = '2021-04-16 15:10:22'
+    starting_datetime = datetime.datetime.strptime(starting_datetime, "%Y-%m-%d %H:%M:%S")
     coin_price_data = get_every_nth_price_as_dataframe(frequency, update_time, starting_datetime, coin)
     coin_price_data["price_change"] = coin_price_data["ask"].diff()
     coin_price_data["gain"] = coin_price_data["price_change"].apply(lambda  x: abs(x) if x >= 0 else 0)
@@ -17,7 +24,7 @@ def rsi_calculator(coin, update_time,  starting_datetime = datetime.datetime.now
     loss_avg = np.mean(coin_price_data["loss"].iloc[1:])
     relative_strength = gain_avg / loss_avg
     rsi = 100 - 100/(1+relative_strength)
-    return  rsi
+    return rsi
 
 
 
